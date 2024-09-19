@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.phoenix.clickpic.photo.mapper.RoomMapper">
+	
+	<resultMap id="RoomResultMap" type="com.phoenix.clickpic.photo.model.Room">
+        <id property="roomId" column="ROOM_ID"/>
+        <result property="frameId" column="FRAME_ID"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="userCount" column="USER_COUNT"/>
+        <result property="roomSession" column="ROOM_SESSION"/>
+        <result property="roomName" column="ROOM_NAME"/>
+        <result property="createdAt" column="CREATED_AT"/>
+        <result property="updatedAt" column="UPDATED_AT"/>
+    </resultMap>
+    
+	<insert id="insertRoom" parameterType="com.phoenix.clickpic.photo.model.Room">
+		<selectKey keyProperty="roomId" resultType="long" order="BEFORE">
+		    SELECT ROOM_ID_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+	    INSERT INTO ROOMS (ROOM_ID, FRAME_ID, USER_ID, USER_COUNT, ROOM_SESSION, ROOM_NAME)
+	    VALUES (#{roomId}, #{frameId}, #{userId}, #{userCount}, #{roomSession}, #{roomName})
+	</insert>
+
+	<select id="findBySession" parameterType="String" resultMap="RoomResultMap">
+        SELECT * FROM ROOMS WHERE ROOM_SESSION = #{roomSession}
+    </select>
+	
+	<insert id="addParticipant" parameterType="com.phoenix.clickpic.photo.model.Participant">
+		INSERT INTO PARTICIPANTS (USER_ID, ROOM_ID)
+		VALUES (#{userId}, #{roomId})
+	</insert>
+	
+</mapper>
+

@@ -1,0 +1,129 @@
+/* 폰트 */
+html {
+  font-family: "Noto Sans KR", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: normal;
+}
+
+/* 정렬 */
+.center {
+	text-align: center;
+}
+
+/* 폰트 사이즈 */
+.largeTitle {
+	font-size: 32px;
+	font-weight: bold;
+	text-align: center;
+	color: #DB574D;
+	margin: 20px;
+}
+
+.middleTitle {
+	font-size: 24px;
+	font-weight: 800;
+	text-align: center;
+	margin: 30px;
+}
+
+.smallTitle {
+	font-size: 12px;
+}
+
+/* 입력폼 */
+input {
+	background-color: transparent;
+	border: none;
+	border-bottom: 1px solid #DB574D;
+	text-align: center;
+	width: 500px;
+	height: 50px;
+	margin: 30px;
+}
+
+input:focus {
+	outline: none;
+}
+
+.output {
+	background-color: transparent;
+	border-bottom: 1px solid #DB574D;
+	text-align: center;
+	width: 500px;
+	height: 50px;
+}
+
+/* 버튼 */
+.btn {
+	background-color: #DB574D;
+	border: none;
+	border-radius: 25px;
+	text-align: center;
+	padding: 5px 20px;
+	color: white;
+	font-size: 16px;
+}
+
+.btn-empty {
+	background-color: transparent;
+	border: 1px solid #DB574D;
+	border-radius: 25px;
+	text-align: center;
+	padding: 5px 30px;
+	color: #DB574D;
+	font-size: 16px;
+	margin: 0 30px;
+}
+
+.btn-selected {
+	background-color: #DB574D;
+	border: none;
+	border-radius: 25px;
+	text-align: center;
+	padding: 5px 30px;
+	color: white;
+	font-size: 16px;
+	margin: 0 30px;
+}
+
+.btn-large {
+	width: 500px;
+	background-color: #DB574D;
+	border: none;
+	border-radius: 25px;
+	text-align: center;
+	padding: 10px;
+	margin: 50px;
+	color: white;
+	font-size: 16px;
+}
+
+.btn-rounded {
+	width: 100px;
+	height: 100px;
+	background-color: transparent;
+	border: 1px solid #DB574D;
+	border-radius: 50%;
+	text-align: center;
+	color: #DB574D;
+	font-size: 16px;
+	line-height: 100px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	text-decoration: none;
+	transition: background-color 0.3s, color 0.3s;
+	margin-top: 20px
+  }
+  
+  .btn-rounded:hover:not(:disabled) {
+	background-color: #DB574D;
+	color: white;
+  }
+  
+  .btn-rounded:disabled {
+	cursor: not-allowed; 
+  }
+  

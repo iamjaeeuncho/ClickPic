@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.phoenix.clickpic.community.mapper.LikeMapper">
+
+    <select id="countLikeByUserAndPhoto" parameterType="map" resultType="int">
+        SELECT COUNT(*) FROM LIKES WHERE USER_ID = #{userId} AND PHOTO_ID = #{photoId}
+    </select>
+
+    <insert id="insertLike" parameterType="map">
+        INSERT INTO LIKES (USER_ID, PHOTO_ID) VALUES (#{userId}, #{photoId})
+    </insert>
+
+    <delete id="deleteLike" parameterType="map">
+        DELETE FROM LIKES WHERE USER_ID = #{userId} AND PHOTO_ID = #{photoId}
+    </delete>
+
+    <select id="countLikesByPhoto" parameterType="long" resultType="int">
+        SELECT COUNT(*) FROM LIKES WHERE PHOTO_ID = #{photoId}
+    </select>
+    
+    <select id="getLikedPhotosByUserId" parameterType="long" resultType="long">
+    	SELECT PHOTO_ID FROM LIKES WHERE USER_ID = #{userId}
+	</select>
+    
+
+</mapper>

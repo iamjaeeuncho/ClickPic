@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.phoenix.clickpic.community.mapper.CommunityMapper">
+
+    <select id="getCommunityPhotos" resultType="map">
+	    SELECT pr.room_name, pf.photo_id, pf.complete_photo, pf.created_at, pr.user_count, 
+	           (SELECT COUNT(*) FROM LIKES l WHERE l.photo_id = pf.photo_id) AS likesCount
+	    FROM PHOTOS pf
+	    JOIN ROOMS pr ON pf.room_id = pr.room_id
+	    WHERE pf.is_public = 'true'
+	    ORDER BY
+	    <choose>
+	        <when test="sortType == 'popularity'">likesCount DESC</when>
+	        <otherwise>pf.created_at DESC</otherwise>
+	    </choose>
+	</select>
+
+    
+    <select id="getPhotoDetail" parameterType="long" resultType="map">
+	    SELECT pf.photo_id, pf.complete_photo, pf.created_at, pf.note, pr.room_name
+	    FROM PHOTOS pf
+	    JOIN ROOMS pr ON pf.room_id = pr.room_id
+	    WHERE pf.photo_id = #{photoId}
+	</select>
+
+    
+
+</mapper>

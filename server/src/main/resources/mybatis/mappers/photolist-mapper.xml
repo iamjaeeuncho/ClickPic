@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.phoenix.clickpic.photolist.mapper.PhotoListMapper">
+
+	<select id="getUserPhotos" parameterType="String" resultType="map">
+		SELECT pr.room_name, pf.photo_id, pf.complete_photo, pf.created_at, pf.note, pr.user_count
+		FROM PHOTOS pf
+		JOIN ROOMS pr ON pf.room_id = pr.room_id
+		WHERE pr.user_id = #{userId}
+		ORDER BY pf.created_at DESC
+	</select>
+
+  
+</mapper>

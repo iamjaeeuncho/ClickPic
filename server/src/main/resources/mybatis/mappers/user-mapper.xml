@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.phoenix.clickpic.member.mapper.UserMapper">
+
+	<insert id="insertUser" parameterType="com.phoenix.clickpic.member.model.User">
+	  INSERT INTO users (USER_ID, NICKNAME, STATUS, CREATED_AT, PASSWORD)
+	  VALUES (#{userId}, #{nickname}, #{status}, #{createdAt}, #{password})
+	</insert>
+
+    <update id="updateUser" parameterType="com.phoenix.clickpic.member.model.User">
+        UPDATE users 
+        SET NICKNAME = #{nickname}, STATUS = #{status}
+        WHERE USER_ID = #{userId}
+    </update>
+
+    <select id="checkUserExists" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM users WHERE USER_ID = #{userId}
+    </select>
+    
+    <!-- userId로 닉네임 가져오기 -->
+    <select id="getNicknameByUserId" parameterType="long" resultType="string">
+        SELECT NICKNAME FROM USERS WHERE USER_ID = #{userId}
+    </select>
+
+   <resultMap id="userResultMap" type="com.phoenix.clickpic.member.model.User">
+       <result column="USER_ID" property="userId"/>
+       <result column="NICKNAME" property="nickname"/>
+   </resultMap>
+   
+   <select id="findByUserId" resultMap="userResultMap">
+       SELECT * FROM users WHERE USER_ID = #{userId}
+   </select>
+
+</mapper>
+

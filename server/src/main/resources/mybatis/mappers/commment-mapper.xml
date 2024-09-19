@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.phoenix.clickpic.community.mapper.CommentMapper">
+
+    <!-- 특정 사진에 대한 댓글 조회 -->
+   <select id="getCommentsWithNickname" resultType="com.phoenix.clickpic.community.model.Comment">
+       SELECT 
+           c.COMMENT_ID AS commentId,
+           c.USER_ID AS userId,
+           c.PHOTO_ID AS photoId,
+           c.CONTENT AS content,
+           c.CREATED_AT AS createdAt,  <!-- 여기서 대문자 컬럼을 소문자로 매핑 -->
+           u.NICKNAME AS nickname
+       FROM COMMENTS c
+       JOIN USERS u ON c.USER_ID = u.USER_ID
+       WHERE c.PHOTO_ID = #{photoId}
+   </select>
+   
+   <select id="getCommunityPhotos" resultType="map">
+       SELECT pr.room_name, pf.photo_id, pf.complete_photo, pf.created_at, pr.user_count, 
+              (SELECT COUNT(*) FROM LIKES l WHERE l.photo_id = pf.photo_id) AS likesCount
+       FROM PHOTOS pf
+       JOIN ROOMS pr ON pf.room_id = pr.room_id
+       WHERE pf.is_public = 'true'
+       ORDER BY
+       <choose>
+           <when test="sortType == 'popularity'">likesCount DESC</when>
+           <otherwise>pf.created_at DESC</otherwise>
+       </choose>
+   </select>
+      
+
+
+    <!-- 댓글 추가 -->
+    <insert id="insertComment" parameterType="com.phoenix.clickpic.community.model.Comment">
+        INSERT INTO COMMENTS (COMMENT_ID, USER_ID, PHOTO_ID, CONTENT, CREATED_AT)
+        VALUES (COMMENT_ID_SEQ.NEXTVAL, #{userId}, #{photoId}, #{content}, SYSDATE)
+    </insert>
+
+</mapper>

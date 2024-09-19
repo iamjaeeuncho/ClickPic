@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.phoenix.clickpic.photo.mapper.PhotoMapper">
+	
+	<resultMap id="PhotoResultMap" type="com.phoenix.clickpic.photo.model.Photo">
+        <id property="photoId" column="photo_id" />
+        <result property="roomId" column="room_id" />
+        <result property="originPhoto" column="origin_photo" />
+        <result property="completePhoto" column="complete_photo" />
+        <result property="isPublic" column="is_public" />
+        <result property="note" column="note" />
+        <result property="createdAt" column="created_at" jdbcType="TIMESTAMP" />
+        <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP" />
+    </resultMap>
+    
+	<insert id="insertOriginPhoto" useGeneratedKeys="true" keyProperty="photoId">
+        <selectKey keyProperty="photoId" resultType="long" order="BEFORE">
+		    SELECT Photo_ID_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+        INSERT INTO PHOTOS (PHOTO_ID, ROOM_ID, ORIGIN_PHOTO, CREATED_AT)
+        VALUES (#{photoId}, #{roomId}, #{originPhoto}, SYSDATE)
+    </insert>
+    
+    <select id="findBySession" parameterType="String" resultMap="PhotoResultMap">
+      SELECT * 
+	  FROM PHOTOS 
+	  WHERE ROOM_ID = (
+	    SELECT ROOM_ID 
+	    FROM ROOMS 
+	    WHERE ROOM_SESSION = #{roomSession}
+	  )
+    </select>
+    
+    <update id="updateCompletePhoto" parameterType="map">
+	    UPDATE PHOTOS
+	    SET COMPLETE_PHOTO = #{completePhoto},
+	        UPDATED_AT = SYSDATE
+	    WHERE ROOM_ID = #{roomId}
+	</update>
+	
+	<update id="updateFinalPhoto" parameterType="map">
+	    UPDATE PHOTOS
+	    SET IS_PUBLIC = #{isPublic},
+	        NOTE = #{note},
+	        UPDATED_AT = SYSDATE
+	    WHERE ROOM_ID = #{roomId}
+	</update>
+	
+	<select id="selectHotPhotos" resultMap="PhotoResultMap">
+	  <![CDATA[
+	    SELECT * 
+		FROM PHOTOS
+		WHERE PHOTOS.PHOTO_ID IN (
+		    SELECT photo_id 
+		    FROM (
+		        SELECT photo_id, COUNT(DISTINCT user_id) AS like_count
+		        FROM LIKES
+		        WHERE photo_id IS NOT NULL
+		        GROUP BY photo_id
+		        ORDER BY like_count DESC
+		    ) 
+		    WHERE ROWNUM <= 10
+		)
+	  ]]>
+	</select>
+
+
+</mapper>
+
